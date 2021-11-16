@@ -1,0 +1,24 @@
+name: Workflow Template
+
+on:
+  workflow_call:
+    inputs:
+      ENVIRONMENT:
+        required: true
+        type: string
+            
+jobs:
+    my-job:
+        name: my-job
+        runs-on: ubuntu-latest
+        environment: ${{ inputs.ENVIRONMENT }}
+
+        env:
+            MY_SECRET: ${{ secrets.MY_SECRET }}
+
+        steps:
+            - uses: actions/checkout@v2
+
+            - run : |
+                echo 'printing envs'
+                env

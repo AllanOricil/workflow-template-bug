@@ -1,0 +1,38 @@
+name: Deploy Workflow
+
+on:
+  push:
+      branches:
+          - master
+  
+  workflow_dispatch:
+
+jobs:
+
+    #this shows that the environment secrets were not loaded when dynamically passing an environment
+    my-workflow-job-1:
+      uses: AllanOricil/workflow-template-bug/.github/workflows/workflow-template.yml@master
+      with:
+        ENVIRONMENT: myenvironment
+
+    #this shows that the environment works because the protection rule blocked the job
+    my-workflow-job-2:
+      uses: AllanOricil/workflow-template-bug/.github/workflows/workflow-template.yml@master
+      with:
+        ENVIRONMENT: myprotectedenvironment
+
+    #this shows that the environment secrets are loaded when the job is inline
+    my-workflow-job-3:
+      name: my-workflow-job-3
+      runs-on: ubuntu-latest
+      environment: myenvironment
+
+      env:
+          MY_SECRET: ${{ secrets.MY_SECRET }}
+
+      steps:
+          - uses: actions/checkout@v2
+
+          - run : |
+              echo 'printing envs'
+              env
