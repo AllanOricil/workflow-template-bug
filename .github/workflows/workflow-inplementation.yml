@@ -45,8 +45,13 @@ jobs:
       secrets:
         MY_SECRET: ${{ secrets.MY_SECRET }} #it is really weird to pass a secret here because it feels that is comming from outside, from the repository secrets, not from the environment. But it magically works, and the environment secret will be loaded
         
+    #this won't work because the workflow-template-fix has MY_SECRET as a required secret. It throws a template compilation error.
+    #my-workflow-job-5:
+    #  uses: AllanOricil/workflow-template-bug/.github/workflows/workflow-template-fix.yml@master
+    #  with:
+    #    ENVIRONMENT: myenvironment
 
-    my-workflow-job-5:
-      uses: AllanOricil/workflow-template-bug/.github/workflows/workflow-template-fix.yml@master
+    my-workflow-job-6:
+      uses: AllanOricil/workflow-template-bug/.github/workflows/workflow-template-fix-without-required-secret.yml@master
       with:
         ENVIRONMENT: myenvironment
