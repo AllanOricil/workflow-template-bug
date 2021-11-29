@@ -9,19 +9,19 @@ on:
 
 jobs:
 
-    #this shows that the environment secrets were not loaded when dynamically passing an environment
+    #this shows that the environment secrets were not loaded when dynamically passing an environment. If you open the last Action run logs you will see that MY_SECRET is empty
     my-workflow-job-1:
       uses: AllanOricil/workflow-template-bug/.github/workflows/workflow-template.yml@master
       with:
         ENVIRONMENT: myenvironment
 
-    #this shows that the environment works because the protection rule blocked the job
+    #this shows that the environment works because the protection rule blocked the job. If you open the last Action run logs you will see that MY_SECRET is empty
     my-workflow-job-2:
       uses: AllanOricil/workflow-template-bug/.github/workflows/workflow-template.yml@master
       with:
         ENVIRONMENT: myprotectedenvironment
 
-    #this shows that the environment secrets are loaded when the job is inline
+    #this shows that the environment secrets are loaded when the job is inline. If you open the last Action run logs you will see that MY_SECRET is NOT empty. But this job is inline and it is not reusable. If you copy and paste it multiple times, you would end up having lots of repeated lines.
     my-workflow-job-3:
       name: my-workflow-job-3
       runs-on: ubuntu-latest
@@ -37,7 +37,7 @@ jobs:
               echo 'printing envs'
               env
 
-    #this uses the workflow template with the fix to make the environment secret to be loaded
+    #this uses the workflow template with the fix to ensure the environment secret is actually loaded. If you open the last Action run logs you will see that MY_SECRET is NOT empty.
     my-workflow-job-4:
       uses: AllanOricil/workflow-template-bug/.github/workflows/workflow-template-fix.yml@master
       with:
@@ -51,7 +51,7 @@ jobs:
     #  with:
     #    ENVIRONMENT: myenvironment
     
-    #this won't work. You will see that MY_SECRET is empty. So it is a MUST that you do as in the my-workflow-job-4.
+    #this won't work.  If you open the last Action run logs you will see that MY_SECRET is empty. So it is a MUST that you do as in the my-workflow-job-4.
     my-workflow-job-6:
       uses: AllanOricil/workflow-template-bug/.github/workflows/workflow-template-fix-without-required-secret.yml@master
       with:
